@@ -1,0 +1,19 @@
+# general .gitignore
+.DS_Store
+Thumbs.db
+.env
+.env.local
+*.log
+logs/
+*.tmp
+*.temp
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build-time QA artifacts (not part of the skill runtime)
+audit*.md
+
+# Runtime working directory created by the skill itself
+wp-blog-post/
