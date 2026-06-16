@@ -34,11 +34,24 @@
    - `<!-- wp:heading -->` 인데 level 속성 누락.
    - `<pre class="mermaid">` 인라인 Mermaid (있으면 즉시 Hard fail).
 
-   ### 시각 요소 검증
-   - `assets/` 디렉토리에 PNG 파일 개수 ≥ 2인지.
-   - 각 PNG가 본문 HTML에서 `{{ASSET:...}}` 플레이스홀더로 참조되는지.
-   - 각 `wp:image` 또는 플레이스홀더에 alt text가 있는지.
-   - Mermaid `.mmd` 원본이 같이 존재하는지.
+   ### Visual element check (infographic-first)
+   - `assets/` contains ≥ 2 PNG files.
+   - **Infographic coverage**: do most major sections carry a visual (target one per section)?
+     Flag any complex section explained in text only with the visualization skipped.
+   - **Type diversity**: if all visuals are the same type (e.g. tables only, flowcharts only),
+     deduct — confirm ≥2 distinct types mixed among mind map / flowchart / chart-graph /
+     architecture / timeline / sequence / webtoon-illustration / creative schematic.
+   - **Creative latitude**: the recommended type list is not exhaustive — any fitting creative
+     visualization (journey strip, cards, labeled map, custom infographic) counts toward coverage
+     and diversity. Judge by "Can the post be understood by skimming images alone?"
+   - **Plugin independence (Hard fail)**: scan the body for inline `<pre class="mermaid">` /
+     `<div class="mermaid">`, chart/diagram shortcodes (`[chart]`, `[mermaid]`, `[diagram]`),
+     plugin-specific blocks, or `<script>`-driven charts. Any of these → Hard fail (visuals must
+     be plugin-independent static images embedded via core `wp:image`).
+   - Each PNG is referenced in the body HTML via a `{{ASSET:...}}` placeholder.
+   - Every `wp:image` / placeholder has alt text.
+   - Mermaid `.mmd` source is preserved alongside (webtoon/custom images may have no `.mmd` —
+     that's an allowed exception).
 
    ### 코드 실행 가능성
    - 각 코드 블록을 읽고, 함수·변수 참조가 자기 완결적인지.
@@ -94,6 +107,9 @@
 - 태그 5개 미만 또는 10개 초과.
 - must-include 항목 누락 1건 이상.
 - 인라인 `<pre class="mermaid">` 1건 이상.
+- Plugin-dependent visual: chart/diagram shortcode (`[chart]`, `[mermaid]`, `[diagram]`),
+  plugin-specific block, or `<script>`-injected chart in the body — visuals must be
+  plugin-independent static images embedded via core `wp:image`.
 
 ## 캘리브레이션 지침
 

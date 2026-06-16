@@ -17,3 +17,7 @@ audit*.md
 
 # Runtime working directory created by the skill itself
 wp-blog-post/
+
+# superpowers (auto-installed; do not track)
+.superpowers/
+docs/superpowers/

@@ -30,17 +30,26 @@ Claude가 기본값에서 약한 영역. 2× 가중.
 
 ## 3. Visual completeness (weight 2×) ★
 
-Claude가 기본값에서 약한 영역(시각 요소를 텍스트로 대체하려는 경향). 2× 가중.
+Area where Claude is weak by default (tends to replace visuals with text). Weighted 2×.
+**Infographic-first**: visuals are the primary delivery vehicle so the post structure and every
+explanation are graspable at a glance. Top-score criterion: "Can the post be understood by
+skimming the images alone?" All visuals must be **plugin-independent static images** (PNG/JPG/SVG)
+embedded via core `wp:image` — no inline Mermaid, shortcodes, or JS chart libraries.
 
-| 점수 | 기준 |
+| Score | Criterion |
 |---|---|
-| 5 | 시각 요소 ≥3개, 종류 다양(다이어그램 + 표 + 인포박스), 각각 본문 내용을 실제로 압축·대체. |
-| 4 | 2개 이상, 복잡 개념이 적절히 다이어그램화. alt text 완비. |
-| 3 | 2개 존재하나 하나가 장식성(표 내용을 본문에서 또 설명). |
-| 2 | 1개만 존재. |
-| 1 | 없음. 또는 `<pre class="mermaid">` 인라인 사용. |
+| 5 | Most major sections carry their own visual (≥3 total). **Diverse types** (e.g. mind map + flowchart + chart/graph + table, or webtoon/illustration, timeline, quadrant). Each compresses/replaces a body paragraph; the type list is not exhaustive — fitting open-ended creative visuals also count. |
+| 4 | ≥2 visuals, complex concepts properly diagrammed, ≥2 distinct types mixed, alt text complete. |
+| 3 | 2 visuals but monotone in type (same diagram/table repeated) or one is decorative (table just re-states body text). |
+| 2 | Only 1 visual. |
+| 1 | None. Or inline `<pre class="mermaid">` used (plugin-dependent). |
 
-**Hard floor**: `assets/` PNG 2개 미만이면 자동 1점 + Hard fail.
+**Hard floor**: fewer than 2 PNGs in `assets/` → auto score 1 + Hard fail.
+**Diversity floor**: if all visuals are the same type (e.g. 3 tables) → max score 3; ≥2 distinct
+types (mind map / flowchart / chart / architecture / timeline / sequence / webtoon-illustration)
+required for score 4+.
+**Plugin-dependency floor**: any inline Mermaid, chart/diagram shortcode, plugin-specific block,
+or JS-injected chart in the post body → auto score 1 + Hard fail.
 
 ## 4. Gutenberg validity (weight 1×)
 
@@ -160,13 +169,15 @@ Evaluator는 첫 라운드 전 내부적으로 아래 앵커를 기준선으로 
 
 ### 3. Visual completeness (★ 2×)
 
-- **Score 1** — "`assets/` 디렉토리에 PNG 0개. 본문에 표 1개뿐인데 Implementation 단계
-  나열 반복. 다이어그램 없음. Hard fail."
-- **Score 3** — "PNG 2개 존재하나 두 번째가 텍스트 내용을 반복한 장식성 표. 복잡 아키텍처
-  (컴포넌트 간 데이터 흐름)를 다이어그램으로 표현하지 않음. alt text는 모두 존재."
-- **Score 5** — "PNG 3개 — flowchart(Implementation §), sequence diagram(API 호출),
-  비교 표(대안 접근법). 각각이 본문 문단을 대체할 수 있을 정도로 압축적. 모든 alt text
-  구체적. 원본 .mmd 파일도 assets/에 보존."
+- **Score 1** — "0 PNGs in `assets/`. Body has one table and just re-lists the Implementation
+  steps as text. No diagrams. Hard fail." (Also score 1 if any inline `<pre class=\"mermaid\">`
+  or chart shortcode is used — plugin-dependent.)
+- **Score 3** — "2 PNGs exist but the second is a decorative table repeating body text. Complex
+  architecture (data flow between components) is not diagrammed. All alt text present."
+- **Score 5** — "3 PNGs — mind map (post scope), flowchart (Implementation §), and a metrics
+  chart (xychart-beta, before/after p95). Diverse types, each compresses a body paragraph and
+  is graspable on its own. All alt text specific. Source `.mmd` files preserved in assets/.
+  Every visual is a plugin-independent static image embedded via core `wp:image`."
 
 ### 4. Gutenberg validity
 

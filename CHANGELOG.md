@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.1.0] — 2026-06-17
+
+Infographic-first visualization directive added across the harness. Visuals become the primary
+delivery vehicle so the post structure and every explanation are graspable at a glance, and every
+infographic must ship as a plugin-independent static image.
+
+### Added
+- **Visual completeness (criterion 3)** reworked to infographic-first: one visual per major
+  section, mandatory type diversity (mind map, flowchart, architecture, chart/graph, timeline,
+  sequence, webtoon/illustration, plus other creative visualizations — the type list is not
+  exhaustive). Pass test: "Can the post be understood by skimming the images alone?"
+- **Plugin independence** enforced end-to-end: every infographic is a self-contained static image
+  embedded via core `wp:image`. Inline Mermaid, chart/diagram shortcodes, plugin-specific blocks,
+  and JS chart libraries are Hard fails.
+- Propagated through `references/`: `planner-prompt.md` (Visuals Plan), `generator-prompt.md`
+  (visual assets), `evaluator-prompt.md` (visual checks + plugin scan Hard fail), `rubric.md`
+  (score anchors, diversity floor, plugin-dependency floor).
+- R3 round and Hard fail triggers updated; `mmdc` multi-type rendering and webtoon/custom-image
+  upload path documented.
+
 ## [1.0.0] — 2026-04-17
 
 Initial release. WordPress blog post authoring and publishing using the

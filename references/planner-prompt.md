@@ -84,11 +84,25 @@
 - 명령 실행 결과: `...`
 - 이전 시도 방법 및 실패 이유: ...
 
-## 6. Visuals Plan (≥2개, 하나 이상 다이어그램)
-- V1: {종류: flowchart/sequence/table/infographic} — {내용} — {어느 섹션에 배치}
-- V2: ...
-- Mermaid 다이어그램은 Generator가 `.mmd` 작성 → `mmdc`로 PNG 렌더 → `assets/`에 저장.
-- 인라인 `<pre class="mermaid">` 금지.
+## 6. Visuals Plan (infographic-first — target one per major section, ≥2 total, diversify types)
+- Principle: plan visuals as the primary delivery vehicle so the post structure and every
+  explanation are **graspable at a glance**. Place one visual per major section and **mandatorily
+  diversify types** (no repeating the same type).
+- Recommended types: `mindmap` (topic decomposition/scope) · `flowchart` (process/branching) ·
+  architecture/schematic · `xychart-beta`/`pie` (metric/proportion charts) · `timeline`
+  (version/migration) · `sequenceDiagram` (flows) · comparison table/quadrant ·
+  webtoon/illustration (problem→solution narrative) · other creative visualizations (the list is
+  not exhaustive — any fitting creative visual, e.g. journey strip, labeled map, custom infographic).
+- All visuals must be **plugin-independent static images** embedded via core `wp:image` —
+  no inline Mermaid, shortcodes, or JS chart libraries.
+- V1: {type} — {content} — {which section}
+- V2: {type (different from V1)} — {content} — {placement}
+- V3+: ... (one per section recommended)
+- Mermaid diagrams: Generator writes `.mmd` → renders PNG with `mmdc` → saves to `assets/`
+  (`mmdc` also renders mindmap, xychart-beta, pie, timeline, quadrantChart).
+- Webtoon/custom infographics: generate image → save to `assets/` → upload via `upload_media.py`
+  in the publish step.
+- Inline `<pre class="mermaid">` is forbidden.
 
 ## 7. Metadata Plan
 - 카테고리(1–2개):

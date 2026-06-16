@@ -141,8 +141,17 @@ Evaluator 통과 **AND** 사용자 명시 승인 후에만 WordPress REST API로
 1. **Content depth & structure** — TL;DR·배경·구현·문제해결·결과의 논리 일관성과 깊이.
 2. **Originality & technical specificity** (★ weight 2×) — 이 작업·이 코드베이스·이 에러에만
    고유한 세부사항. 템플릿/클리셰 감점.
-3. **Visual completeness** (★ weight 2×) — 최소 2개 시각 요소, 복잡 개념 다이어그램화,
-   Mermaid→PNG 렌더 성공, alt text 존재.
+3. **Visual completeness** (★ weight 2×) — **Infographic-first**. The post structure and every
+   explanation must be **graspable at a glance**; visuals are the primary delivery vehicle, not
+   decoration. Aim for one visual per major section (minimum 2 per post). **Type diversity is
+   mandatory**: mind map (topic decomposition), diagram/schematic, flowchart, architecture,
+   chart/graph (metrics), timeline, sequence, webtoon/illustration (problem→solution narrative),
+   and other creative visualizations beyond these types — the list is not exhaustive (journey
+   strip, quadrant, labeled map, cards, custom infographic, …). Repeating the
+   same type is penalized. Complex concepts must be diagrammed; Mermaid→PNG must render; alt text
+   required. **Plugin-independent only**: every infographic ships as a static image file embedded
+   via the core `wp:image` block — no inline Mermaid, shortcodes, or JS chart libraries.
+   Pass criterion: "Can the post be understood by skimming the images alone?"
 4. **Gutenberg validity** — wp:group inner block 규칙, heading class, list-item 래핑.
    하나라도 위반 시 hard fail.
 5. **Metadata fit** — 카테고리(기존 재사용 우선) 1–2개, 태그 5–10개, SEO 제목 구체성.
@@ -154,6 +163,8 @@ Evaluator 통과 **AND** 사용자 명시 승인 후에만 WordPress REST API로
 **Hard fail triggers** (즉시 반려):
 - Gutenberg 블록 규칙 위반 1건 이상.
 - 시각 요소 2개 미만.
+- Plugin-dependent visual: inline Mermaid, chart/diagram shortcode, plugin-specific block, or
+  JS-injected chart in the body. Visuals must be plugin-independent static images via `wp:image`.
 - 가짜 코드·플레이스홀더(`TODO`, `...` 이상), 실행 불가능한 스니펫.
 - 한글 포스트에서 종결어미 마침표 누락.
 - 외부 수치 인용에서 확인 불가능한 숫자.
@@ -165,7 +176,12 @@ Evaluator 통과 **AND** 사용자 명시 승인 후에만 WordPress REST API로
 
 1. **R1 Skeleton & Hook** — 제목·TL;DR·섹션 구조 + 훅·배경 확정.
 2. **R2 Implementation & Problems** — 실제 코드·에러·해결 세부 채움. 시각 요소 1차 생성.
-3. **R3 Visuals & Metadata** — Mermaid→PNG 렌더, 카테고리/태그 최종화, SEO 제목 확정.
+3. **R3 Visuals & Metadata** — Infographic-first design: target one visual per section, diversify
+   types (mind map, flowchart, architecture, chart/graph, timeline, sequence, webtoon/illustration,
+   creative schematic). Render Mermaid→PNG (`mmdc` renders mindmap, xychart-beta, pie, timeline,
+   quadrantChart in addition to flowcharts); webtoon/custom infographics are generated as images
+   then uploaded via `upload_media.py`. All visuals are **plugin-independent static images** embedded
+   via core `wp:image` (no inline Mermaid/shortcodes/JS). Finalize categories/tags and SEO title.
 4. **R4 Gutenberg Compliance** — 블록 규칙 전수검사, 오탈자·종결어미 점검.
 5. **(옵션) R5 Revision** — 잔여 blocker 수정.
 

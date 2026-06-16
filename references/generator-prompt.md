@@ -30,17 +30,37 @@ Evaluator가 네 작업을 파일로만 검증할 것이다. 너는 Planner/Eval
    - 또는 `python3 ~/.claude/skills/wp-blog-post/scripts/md_to_html.py < post_vN.md > post_vN.html`
      호출 후, 그 출력의 블록 규칙 준수를 직접 재검사.
 
-3. **시각 자산**:
-   - Mermaid: `wp-blog-post/assets/diagram_N.mmd` 파일로 저장 → 아래 명령으로 렌더:
+3. **Visual assets (infographic-first)**:
+   - **Principle**: visuals are the primary delivery vehicle so the post structure and every
+     explanation are graspable at a glance. Target one visual per major section (≥2 per post)
+     and **diversify types** — mind map (topic decomposition), flowchart, architecture/schematic,
+     chart/graph (metrics), timeline, sequence, webtoon/illustration (problem→solution narrative),
+     and other creative visualizations beyond these types — the list is not exhaustive (journey
+     strip, quadrant, labeled map, cards, custom infographic, …). Repeating one
+     type is penalized by the Evaluator. Standard: "Can the post be understood by skimming the
+     images alone?"
+   - **Plugin-independent images only**: every infographic must be a self-contained static image
+     file (PNG/JPG/SVG) that renders with no WordPress plugin, shortcode, or client-side library.
+     Render ahead of time, then embed via the core `wp:image` block. Never emit inline Mermaid,
+     `[chart]`/`[diagram]` shortcodes, plugin-specific blocks, or `<script>`-driven charts.
+   - Mermaid: save to `wp-blog-post/assets/diagram_N.mmd`, render with:
      ```bash
      mmdc -i wp-blog-post/assets/diagram_N.mmd \
           -o wp-blog-post/assets/diagram_N.png \
           -w 900 --backgroundColor white
      ```
-   - 렌더 실패 시 에러를 `handoff.md`에 기록하고 FAIL을 수용한다. 가짜 PNG 만들지 말 것.
-   - 본문 HTML에는 플레이스홀더 URL `{{ASSET:diagram_N.png}}`을 사용. 실제 URL 치환은
-     사용자 승인 후 publish 단계에서 이루어진다.
-   - `<pre class="mermaid">` 인라인 절대 금지 — WordPress 기본 상태에서 렌더되지 않음.
+     `mmdc` renders `mindmap`, `xychart-beta` (charts), `pie`, `timeline`, `quadrantChart`, and
+     `sequenceDiagram` in addition to flowcharts — pick the header that fits the content and vary it.
+     Mermaid is used only as a local CLI render step; its source never ships in the post body.
+   - **Webtoon / custom infographics**: for illustrations, comic panels, or hand-styled schematics
+     that Mermaid can't express, generate a static PNG with an image-gen tool, save to
+     `wp-blog-post/assets/`, and upload via `upload_media.py` in the publish step. Specific alt
+     text required on every image.
+   - On render failure, record the error in `handoff.md` and accept FAIL. Never fabricate a PNG.
+   - In the body HTML use placeholder URLs `{{ASSET:diagram_N.png}}`; real URL substitution happens
+     in the publish step after user approval.
+   - Inline `<pre class="mermaid">` is strictly forbidden — it does not render on a stock WordPress
+     install (plugin-dependent).
 
 4. **Must-include 콘텐츠**: `spec.md` Section 5의 코드·에러·수치를 100% 반영한다.
    가짜 함수명, `doSomething()`, `...`, `TODO` 형태의 플레이스홀더는 Hard fail이다.
