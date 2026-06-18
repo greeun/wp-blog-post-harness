@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.2.0] — 2026-06-18
+
+Visualization criterion reworked from **infographic-first quota** to **representation-fit**. The
+1.1.0 directive made every post produce the same shape: one auto-generated visual per section, all
+rendered through Mermaid (`mmdc`), so posts looked uniform within and across each other. 1.2.0 makes
+the content decide the form, adds an editorial render path, and penalizes both under- and
+over-visualization.
+
+### Changed
+- **Criterion 3 renamed** `Visual completeness` → **`Visual fit & completeness`**. No per-section
+  quota; a visual earns its place only when it makes a concept graspable that prose can't carry.
+  Choosing prose/table/code over a diagram is now scored as good craft, not a gap.
+- **Open, non-diagram-only form menu**: editorial card-news / poster cards (preferred for conceptual
+  content), annotated screenshots, comparison tables, code diffs, illustration/webtoon, and
+  structural diagrams (flowchart / mind map / architecture / sequence / timeline / chart) **only when
+  the content is genuinely a process / hierarchy / flow / metric**.
+- **Mermaid demoted** to genuine node-graphs only — never the default, never to hit a count.
+- **Two-directional Hard fails**: under-visualization (a complex concept left as a text wall) AND
+  filler/quota visuals AND render monoculture (all-`mmdc` set). Replaces the old "fewer than 2 PNGs"
+  count floor.
+
+### Added
+- **`scripts/render_html.py`** — headless-Chromium (Playwright) HTML/CSS → PNG renderer for editorial
+  cards/posters/schematics. Card-news default 1080×1350 @2x; `--selector` element capture; `--full-page`.
+- Render-origin diversity (mix card + screenshot + structural diagram) now weighed alongside type
+  diversity; an all-Mermaid set is a monoculture deduction.
+- Propagated through `SKILL.md` (rubric 3, Hard fail triggers, R2/R3 round sequence, scripts table,
+  red flags) and `references/`: `planner-prompt.md` (Visuals Plan + R2/R3 contract),
+  `generator-prompt.md` (visual assets + anti-patterns + handoff template), `evaluator-prompt.md`
+  (visual fit check + Hard fail + calibration), `rubric.md` (criterion 3 + score anchors),
+  `gutenberg-rules.md` (Rule 5 broadened to all pre-rendered images).
+
 ## [1.1.0] — 2026-06-17
 
 Infographic-first visualization directive added across the harness. Visuals become the primary

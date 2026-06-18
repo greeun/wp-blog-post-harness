@@ -34,24 +34,30 @@
    - `<!-- wp:heading -->` 인데 level 속성 누락.
    - `<pre class="mermaid">` 인라인 Mermaid (있으면 즉시 Hard fail).
 
-   ### Visual element check (infographic-first)
-   - `assets/` contains ≥ 2 PNG files.
-   - **Infographic coverage**: do most major sections carry a visual (target one per section)?
-     Flag any complex section explained in text only with the visualization skipped.
-   - **Type diversity**: if all visuals are the same type (e.g. tables only, flowcharts only),
-     deduct — confirm ≥2 distinct types mixed among mind map / flowchart / chart-graph /
-     architecture / timeline / sequence / webtoon-illustration / creative schematic.
-   - **Creative latitude**: the recommended type list is not exhaustive — any fitting creative
-     visualization (journey strip, cards, labeled map, custom infographic) counts toward coverage
-     and diversity. Judge by "Can the post be understood by skimming images alone?"
+   ### Visual fit check (representation-fit, NOT quota)
+   Judge fit both ways — penalize under-visualizing a complex concept AND quota/filler/monoculture.
+   - **Per-concept fit**: walk each major concept. For each, decide: did it need a visual? If a
+     clearly complex concept (multi-component flow, before/after, decision branching, architecture)
+     is left as a text wall → under-visualization (max score 2 + Hard fail). If a section reads fine
+     as prose and got no visual → that is **correct**, not a deficiency; do not deduct for it.
+   - **No quota**: do NOT reward "one visual per section". A visual that just restates adjacent prose
+     or was stamped to hit a count → decorative filler, deduct (max score 3).
+   - **Render-origin diversity**: if every visual is a `mmdc` Mermaid render (uniform auto-diagram
+     look) while the content offered better forms → render monoculture, max score 3. For score 4+,
+     confirm ≥2 distinct render origins/forms mixed among: editorial card-news/poster (HTML/CSS→PNG
+     via `render_html.py`), annotated screenshot, comparison table, code diff, illustration/webtoon,
+     structural diagram (Mermaid node-graph). Mermaid is acceptable ONLY for genuine node-graphs.
+   - **Form-fit, open menu**: the form must fit the content — a process→flowchart, a hierarchy→mind
+     map, a metric→chart, a concept/framing→editorial card, real UI→screenshot, dense comparison→table.
+     Judge by "Is each complex concept in the form that fits it, with no filler?"
    - **Plugin independence (Hard fail)**: scan the body for inline `<pre class="mermaid">` /
      `<div class="mermaid">`, chart/diagram shortcodes (`[chart]`, `[mermaid]`, `[diagram]`),
      plugin-specific blocks, or `<script>`-driven charts. Any of these → Hard fail (visuals must
      be plugin-independent static images embedded via core `wp:image`).
    - Each PNG is referenced in the body HTML via a `{{ASSET:...}}` placeholder.
    - Every `wp:image` / placeholder has alt text.
-   - Mermaid `.mmd` source is preserved alongside (webtoon/custom images may have no `.mmd` —
-     that's an allowed exception).
+   - Mermaid `.mmd` source is preserved alongside; editorial-card HTML source (or webtoon/custom
+     images) may have no `.mmd` — that's an allowed exception.
 
    ### 코드 실행 가능성
    - 각 코드 블록을 읽고, 함수·변수 참조가 자기 완결적인지.
@@ -88,7 +94,7 @@
 
 1. **Content depth & structure**
 2. **Originality & technical specificity** (weight 2×)
-3. **Visual completeness** (weight 2×)
+3. **Visual fit & completeness** (weight 2×)
 4. **Gutenberg validity**
 5. **Metadata fit**
 6. **Craft**
@@ -101,7 +107,8 @@
 
 ### Hard fail triggers (즉시 FAIL, 다른 점수와 무관)
 - Gutenberg 블록 규칙 위반 1건 이상.
-- `assets/` PNG 2개 미만.
+- **Under-visualization**: 명백히 복잡한 개념(다중 컴포넌트 흐름·before/after·분기·아키텍처)을
+  맞는 visual 없이 텍스트 벽으로 방치. (단순 산문 섹션에 visual 없는 것은 정상 — Hard fail 아님.)
 - 가짜 코드·플레이스홀더 1건 이상.
 - 한글 종결어미 마침표 누락 1건 이상 (KO).
 - 태그 5개 미만 또는 10개 초과.
@@ -116,7 +123,9 @@
 - **첫 라운드 전 few-shot 기준선 내부 구성**:
   - "Originality 2 — '오늘날 빠르게 변화하는 개발 환경에서…' 류 오프닝, 이 작업 고유의
     디테일 부재."
-  - "Visual completeness 3 — Mermaid 렌더 1개만 존재(`assets/diagram_1.png`), 표 없음."
+  - "Visual fit 3 — 3 visuals지만 전부 `mmdc` Mermaid(render monoculture)이고, 그중 하나는
+    본문 리스트를 그대로 다시 그린 filler. 정작 복잡한 before/after 지표는 텍스트 단락으로 방치."
+  - "Visual fit 2 — 섹션마다 기계적으로 1개씩 박은 quota. 개념이 형식에 안 맞음."
   - "Gutenberg validity 1 — 라인 47: `<h4>Title</h4>` 가 wp:group 내부에서 블록 주석 없이
     등장, 'unexpected content' 오류 재현 가능."
 - 전 기준 ≥4라면 네가 관대한지 의심하라. 깐깐한 기술 편집자가 잡을 법한 1가지를 더 찾아라.
@@ -143,7 +152,7 @@
 |---|---|---|---|
 | Content depth & structure | x | 1× | ... |
 | Originality & tech specificity | x | 2× | ... |
-| Visual completeness | x | 2× | ... |
+| Visual fit & completeness | x | 2× | ... |
 | Gutenberg validity | x | 1× | ... |
 | Metadata fit | x | 1× | ... |
 | Craft | x | 1× | ... |

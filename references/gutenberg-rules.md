@@ -72,7 +72,12 @@
 <!-- /wp:group -->
 ```
 
-## Rule 5: Mermaid 인라인 절대 금지
+## Rule 5: 모든 visual은 사전 렌더된 정적 이미지 → `wp:image` (인라인 Mermaid 금지)
+
+표현 형식과 무관하게(에디토리얼 카드·스크린샷·도식·Mermaid) 본문에는 **사전 렌더된 PNG/JPG/SVG만**
+`wp:image` 블록으로 들어간다. 에디토리얼 카드는 HTML/CSS로 디자인 후 `scripts/render_html.py`로
+PNG 렌더; Mermaid 구조도는 `.mmd` → `mmdc` → PNG. 어느 경우든 소스(HTML/`.mmd`)는 본문에 싣지 않는다.
+
 
 ```html
 <!-- ABSOLUTELY WRONG — does not render -->

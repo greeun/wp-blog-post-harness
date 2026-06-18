@@ -84,24 +84,32 @@
 - 명령 실행 결과: `...`
 - 이전 시도 방법 및 실패 이유: ...
 
-## 6. Visuals Plan (infographic-first — target one per major section, ≥2 total, diversify types)
-- Principle: plan visuals as the primary delivery vehicle so the post structure and every
-  explanation are **graspable at a glance**. Place one visual per major section and **mandatorily
-  diversify types** (no repeating the same type).
-- Recommended types: `mindmap` (topic decomposition/scope) · `flowchart` (process/branching) ·
-  architecture/schematic · `xychart-beta`/`pie` (metric/proportion charts) · `timeline`
-  (version/migration) · `sequenceDiagram` (flows) · comparison table/quadrant ·
-  webtoon/illustration (problem→solution narrative) · other creative visualizations (the list is
-  not exhaustive — any fitting creative visual, e.g. journey strip, labeled map, custom infographic).
+## 6. Visuals Plan (representation-fit — NOT a per-section quota)
+- Principle: a visual earns its place only when it makes a concept graspable that prose can't carry
+  efficiently. **The content decides the form.** Do NOT assign one visual per section. Most sections
+  read fine as prose — leaving them as prose is correct, not a gap.
+- **Per concept, decide in two steps**: (1) Does this concept genuinely need a visual? (2) If yes,
+  which form fits? The menu is **open and not diagram-only**:
+  - **Editorial card-news / poster card** (hand-designed HTML/CSS → PNG) — **preferred** for
+    conceptual, framing, summary, and explanatory content. Full control of type hierarchy, color
+    system, layout; breaks the auto-diagram sameness. (e.g. freestory card-news look: 4:5 cards.)
+  - **Annotated screenshot** — for real UI / CLI output / actual results.
+  - **Comparison table** — dense multi-axis comparison (a 1st-class visual, not filler).
+  - **Code diff / callout** — focused before/after or a key caveat.
+  - **Illustration / webtoon** — problem→solution narrative.
+  - **Structural diagram** (flowchart / mind map / architecture / sequence / timeline / chart) —
+    **only when the content genuinely is a process / hierarchy / flow / metric.** Mermaid is for
+    real node-graphs, never the default and never to hit a count.
+- **Render-origin diversity > type diversity**: an all-Mermaid set looks uniform even with varied
+  diagram types. Plan a mix of origins (card + screenshot + at most the structural diagrams a graph fits).
 - All visuals must be **plugin-independent static images** embedded via core `wp:image` —
   no inline Mermaid, shortcodes, or JS chart libraries.
-- V1: {type} — {content} — {which section}
-- V2: {type (different from V1)} — {content} — {placement}
-- V3+: ... (one per section recommended)
-- Mermaid diagrams: Generator writes `.mmd` → renders PNG with `mmdc` → saves to `assets/`
-  (`mmdc` also renders mindmap, xychart-beta, pie, timeline, quadrantChart).
-- Webtoon/custom infographics: generate image → save to `assets/` → upload via `upload_media.py`
-  in the publish step.
+- List ONLY the visuals the content actually warrants (could be 1, could be several):
+  - V{n}: {form} — {concept it makes graspable} — {section} — {why a visual beats prose here}
+- Editorial cards/posters/schematics: Generator designs HTML/CSS → `scripts/render_html.py` → PNG
+  in `assets/` → uploaded via `upload_media.py` at publish.
+- Mermaid diagrams (structural only): Generator writes `.mmd` → `mmdc` → PNG in `assets/`.
+- Webtoon/custom illustrations: generate image → `assets/` → upload via `upload_media.py`.
 - Inline `<pre class="mermaid">` is forbidden.
 
 ## 7. Metadata Plan
@@ -132,10 +140,15 @@
 - [ ] Must-include 코드 스니펫 전부 반영 (섹션별 최소 1개)
 - [ ] 각 코드 블록에 언어 태그
 - [ ] Problems & Solutions 섹션에 최소 1개 실제 에러·원인·해결
-- [ ] 시각 요소 1차 생성 (Mermaid `.mmd` 작성 완료)
+- [ ] Visual mapping 완료: 개념별로 (1) visual 필요 여부 (2) 맞는 형식 결정 →
+      `§6 Visuals Plan`에 warrant되는 visual만 목록화 (불필요한 섹션은 prose로 두는 것이 정상)
 
 ### R3 Visuals & Metadata
-- [ ] `assets/*.png` 최소 2개 존재 (`mmdc` 렌더 완료)
+- [ ] §6에 계획한 각 visual의 PNG가 `assets/`에 존재 (개수가 아니라 계획 충족 여부로 검증)
+- [ ] 렌더 origin이 단일 `mmdc` 모노컬처가 아님 (에디토리얼 카드/스크린샷/표 등 ≥2 origin 혼합;
+      단, 콘텐츠가 구조도 1개만 warrant하면 그 1개로 충분 — 억지 추가 금지)
+- [ ] 복잡한 개념 중 텍스트 벽으로 방치된 것 없음 (under-visualization 0)
+- [ ] filler/quota visual 없음 (본문 산문을 그대로 재진술하는 visual 0)
 - [ ] 각 이미지 alt text 기재
 - [ ] 카테고리 최종 확정 (기존 재사용 우선)
 - [ ] 태그 5–10개 확정

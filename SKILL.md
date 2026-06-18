@@ -35,8 +35,8 @@ Evaluator 통과 **AND** 사용자 명시 승인 후에만 WordPress REST API로
    분리하고, 파일로만 소통한다.
 2. **컨텍스트 불안 (조기 종결).** 세션이 길어질수록 모델은 "충분히 썼다"는 이유로
    마무리를 서두른다. 결과: Gutenberg 블록 규칙 위반(특히 wp:group 내부 raw HTML),
-   시각 요소 1개 이하, 태그 5개 미만, 종결어미 마침표 누락. → 라운드 말미마다 **컨텍스트
-   리셋**과 구조화된 `handoff.md`를 강제한다.
+   시각화가 필요한 개념을 텍스트 벽으로 방치, 태그 5개 미만, 종결어미 마침표 누락. → 라운드
+   말미마다 **컨텍스트 리셋**과 구조화된 `handoff.md`를 강제한다.
 
 ---
 
@@ -141,28 +141,40 @@ Evaluator 통과 **AND** 사용자 명시 승인 후에만 WordPress REST API로
 1. **Content depth & structure** — TL;DR·배경·구현·문제해결·결과의 논리 일관성과 깊이.
 2. **Originality & technical specificity** (★ weight 2×) — 이 작업·이 코드베이스·이 에러에만
    고유한 세부사항. 템플릿/클리셰 감점.
-3. **Visual completeness** (★ weight 2×) — **Infographic-first**. The post structure and every
-   explanation must be **graspable at a glance**; visuals are the primary delivery vehicle, not
-   decoration. Aim for one visual per major section (minimum 2 per post). **Type diversity is
-   mandatory**: mind map (topic decomposition), diagram/schematic, flowchart, architecture,
-   chart/graph (metrics), timeline, sequence, webtoon/illustration (problem→solution narrative),
-   and other creative visualizations beyond these types — the list is not exhaustive (journey
-   strip, quadrant, labeled map, cards, custom infographic, …). Repeating the
-   same type is penalized. Complex concepts must be diagrammed; Mermaid→PNG must render; alt text
-   required. **Plugin-independent only**: every infographic ships as a static image file embedded
+3. **Visual fit & completeness** (★ weight 2×) — **Representation-fit, not quota.** A visual exists
+   to make a concept graspable that prose can't carry efficiently — so **the content decides the
+   form, and a visual is added only when it earns its place.** No per-section quota; choosing a
+   table / code block / callout / prose over a diagram is good craft, not a deficiency.
+   **Decision per concept**: (1) Does this genuinely need a visual? (2) If yes, which representation
+   fits? The menu is **open and not diagram-only**: editorial card-news / poster cards (hand-designed
+   HTML/CSS → PNG, the preferred mode for conceptual & explanatory content), annotated screenshots,
+   comparison tables, code diffs, illustration/webtoon, AND structural diagrams (flowchart, mind map,
+   architecture, sequence, timeline, chart) **only when the content is genuinely a process / hierarchy
+   / flow / metric.** **Render-origin diversity matters as much as type diversity**: two `mmdc`
+   diagrams look identical even if their types differ — that monoculture is the failure. Mix
+   editorial cards + screenshots + (at most) the structural diagrams a graph actually fits.
+   **Mermaid is demoted to genuine node-graphs only** — never the default, never to hit a count.
+   Alt text required. **Plugin-independent only**: every visual ships as a static image file embedded
    via the core `wp:image` block — no inline Mermaid, shortcodes, or JS chart libraries.
-   Pass criterion: "Can the post be understood by skimming the images alone?"
+   Pass criterion: "Is every complex concept either visualized in the form that fits it, or
+   deliberately left as prose because prose was the better vehicle — with no decorative filler?"
 4. **Gutenberg validity** — wp:group inner block 규칙, heading class, list-item 래핑.
    하나라도 위반 시 hard fail.
 5. **Metadata fit** — 카테고리(기존 재사용 우선) 1–2개, 태그 5–10개, SEO 제목 구체성.
 6. **Craft** — 한글 종결어미 마침표, 코드 블록 언어 태그, 오탈자, 어조 일관성.
 
-**Weighting**: Originality와 Visual completeness가 Claude의 약점(템플릿 기본값으로
+**Weighting**: Originality와 Visual fit이 Claude의 약점(템플릿 기본값으로
 회귀) 축이라 2× 가중. 통과: 가중 평균 ≥4 AND 모든 기준 ≥3 AND Hard fail 없음.
 
 **Hard fail triggers** (즉시 반려):
 - Gutenberg 블록 규칙 위반 1건 이상.
-- 시각 요소 2개 미만.
+- **Under-visualization**: a clearly complex concept (multi-component flow, before/after, decision
+  branching, architecture) left as a wall of text with no fitting visual.
+- **Decorative filler / quota visuals**: a visual that just restates adjacent prose, or visuals
+  added one-per-section to hit a count rather than because the content needed them.
+- **Render monoculture**: every visual is a `mmdc` Mermaid render (no editorial card / screenshot /
+  other origin) so the post reads as a uniform auto-diagram set — when the content offered better forms.
+- Zero genuine visuals in a post whose content has at least one concept that clearly warranted one.
 - Plugin-dependent visual: inline Mermaid, chart/diagram shortcode, plugin-specific block, or
   JS-injected chart in the body. Visuals must be plugin-independent static images via `wp:image`.
 - 가짜 코드·플레이스홀더(`TODO`, `...` 이상), 실행 불가능한 스니펫.
@@ -175,13 +187,17 @@ Evaluator 통과 **AND** 사용자 명시 승인 후에만 WordPress REST API로
 ## Default Round Sequence (Planner가 조정 가능)
 
 1. **R1 Skeleton & Hook** — 제목·TL;DR·섹션 구조 + 훅·배경 확정.
-2. **R2 Implementation & Problems** — 실제 코드·에러·해결 세부 채움. 시각 요소 1차 생성.
-3. **R3 Visuals & Metadata** — Infographic-first design: target one visual per section, diversify
-   types (mind map, flowchart, architecture, chart/graph, timeline, sequence, webtoon/illustration,
-   creative schematic). Render Mermaid→PNG (`mmdc` renders mindmap, xychart-beta, pie, timeline,
-   quadrantChart in addition to flowcharts); webtoon/custom infographics are generated as images
-   then uploaded via `upload_media.py`. All visuals are **plugin-independent static images** embedded
-   via core `wp:image` (no inline Mermaid/shortcodes/JS). Finalize categories/tags and SEO title.
+2. **R2 Implementation & Problems** — 실제 코드·에러·해결 세부 채움. **Visual mapping**: list each
+   concept and decide per concept whether it needs a visual and which form fits (most don't — that's
+   fine). Draft the chosen visuals' sources.
+3. **R3 Visuals & Metadata** — Representation-fit design: build only the visuals R2 mapped, in the
+   form that fits each. **Editorial card-news / poster cards** (hand-designed HTML/CSS → PNG via
+   `scripts/render_html.py`) are the preferred mode for conceptual & explanatory content. Use
+   **annotated screenshots** for real UI/output, **tables** for dense comparison, and reserve
+   **Mermaid → PNG** (`mmdc`) for genuine node-graphs only (data flow, state machine, dependency).
+   Vary render origin, not just diagram type — avoid an all-Mermaid set. Webtoon/custom images are
+   generated then uploaded via `upload_media.py`. All visuals are **plugin-independent static images**
+   embedded via core `wp:image` (no inline Mermaid/shortcodes/JS). Finalize categories/tags and SEO title.
 4. **R4 Gutenberg Compliance** — 블록 규칙 전수검사, 오탈자·종결어미 점검.
 5. **(옵션) R5 Revision** — 잔여 blocker 수정.
 
@@ -270,8 +286,8 @@ subagent 디스패치 전제로 설계되었으며, 단일 세션 실행은 자�
 - **라운드 캡 escalation**: 캡 도달 시 자동 게시 절대 금지. 사용자 결정 필수.
 - **Publish gate**: Evaluator PASS는 게시 조건이 **아니다**. 오직 사용자 승인만.
 - **카테고리 신규 생성**: Planner가 spec에 사유 명시. 사유가 약하면 Evaluator가 감점.
-- **Mermaid 렌더 실패**: PNG가 없으면 Visual completeness 자동 FAIL — 인라인 `<pre class="mermaid">`
-  금지(wp-blog-post 원문 규칙).
+- **렌더 실패**: 계획한 visual의 PNG가 없으면 Visual fit 자동 FAIL — 인라인 `<pre class="mermaid">`
+  금지(wp-blog-post 원문 규칙). 에디토리얼 카드 렌더 실패는 `handoff.md`에 에러 기록 후 FAIL 수용.
 
 ### Tuning the Evaluator across runs
 
@@ -317,12 +333,19 @@ export WP_APP_PASSWORD="xxxx xxxx xxxx xxxx xxxx xxxx"
 
 | 스크립트 | 역할 | 호출 시점 |
 |---|---|---|
+| `scripts/render_html.py` (이 스킬) | **에디토리얼 visual** HTML/CSS → PNG (카드뉴스/포스터/도식). 1급·우선 경로 | Generator가 시각 자산 생성 시 |
 | `~/.claude/skills/wp-blog-post/scripts/md_to_html.py` | Markdown → Gutenberg 블록 HTML | Generator가 드래프트 생성 시 |
 | `~/.claude/skills/wp-blog-post/scripts/upload_media.py` | 이미지 업로드 (PNG/JPG) | 사용자 승인 후 publish 단계 |
 | `~/.claude/skills/wp-blog-post/scripts/publish_post.py` | 포스트 게시 (draft/publish) | 사용자 승인 후 publish 단계 |
 
-Mermaid 렌더: `mmdc -i diagram.mmd -o diagram.png -w 900 --backgroundColor white`
-(Generator 단계, `assets/`에 저장).
+**에디토리얼 카드 렌더 (우선 경로)**: 개념 카드·포스터·도식을 HTML/CSS로 디자인 후
+`python3 scripts/render_html.py card.html -o assets/card_N.png --width 1080 --height 1350 --scale 2`
+(카드뉴스 4:5; `--selector`로 단일 요소, `--full-page`로 긴 인포그래픽). 타입 하이어라키·컬러
+시스템을 직접 제어 → 자동 도식 룩 탈피.
+
+**Mermaid 렌더 (구조도 한정)**: 진짜 node-graph(데이터 흐름·상태기계·의존성)에만.
+`mmdc -i diagram.mmd -o diagram.png -w 900 --backgroundColor white` (`assets/`에 저장).
+기본값으로 쓰지 말 것 — 모든 visual을 Mermaid로 찍으면 render monoculture로 감점.
 
 ---
 
@@ -429,6 +452,9 @@ wp-blog-post/
 | 섹션 생략·"..."·"유사하게 처리" | 컨텍스트 불안 | FAIL, 새 세션에서 해당 섹션부터 재개 |
 | 코드에 실제 함수명 없이 `doSomething()` 등 플레이스홀더 | 가짜 구현 | Hard fail |
 | 시각 요소 계획만 있고 PNG 미생성 | 컨텍스트 불안 마무리 | Hard fail |
+| 섹션마다 기계적으로 visual 1개씩 박음 | quota 사고 (내용 무관) | 표현 적합성으로 재판단, 불필요한 것 제거 |
+| 모든 visual이 Mermaid 도식 | render monoculture | 카드/스크린샷/표로 다양화, Mermaid는 구조도만 |
+| 복잡 개념을 텍스트 벽으로 방치 | under-visualization | 해당 개념을 맞는 형식으로 시각화 |
 | Evaluator가 "전체적으로 무난하다"로 PASS | 자기 설득 | 루브릭 재적용, 라인 단위 증거 요구 |
 | 기존 카테고리 무시하고 전부 신규 생성 | Planner 스코프 미확인 | Planner 재실행 |
 | 사용자 승인 전 `publish_post.py` 호출 시도 | 게이트 위반 | 즉시 중단, 사용자 승인 필수 |

@@ -61,12 +61,12 @@ Version 1.0.0 · MIT · English: [README.md](README.md)
 
 1. **Content depth & structure** — TL;DR → 배경 → 구현 → 문제해결 → 결과가 한 덩어리
 2. **Originality & technical specificity** (★ 2×) — 이 코드베이스, 이 에러, 이 코드. AI slop 감점
-3. **Visual completeness** (★ 2×) — 시각 요소 ≥2개, Mermaid→PNG 렌더, alt text 완비
+3. **Visual fit & completeness** (★ 2×) — quota 아님(표현 적합성): 복잡한 개념마다 맞는 형식(에디토리얼 카드/스크린샷/표/구조도), filler·Mermaid 모노컬처 감점, 산문이 나으면 산문
 4. **Gutenberg validity** — wp:group 내부 블록, wp:list-item, heading class, Mermaid 인라인 금지
 5. **Metadata fit** — 카테고리 1–2개(기존 우선), 태그 5–10개, 구체 SEO 제목
 6. **Craft** — 한글 종결어미 마침표 100%, 코드 블록 언어 태그, 오탈자 0
 
-2× 가중(Originality, Visual completeness)은 Claude의 약점 축에 가중을 두라는 원문
+2× 가중(Originality, Visual fit)은 Claude의 약점 축에 가중을 두라는 원문
 지침을 따른다. 18개 few-shot 앵커는 [`references/rubric.md`](references/rubric.md) 참조.
 
 ## 환경 설정

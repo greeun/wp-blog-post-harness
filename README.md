@@ -62,12 +62,12 @@ Full article inventory — including V1 6h/$200 / V2 3h50m/$124.70 cost anchors 
 
 1. **Content depth & structure** — TL;DR → background → implementation → problems → results read as one
 2. **Originality & technical specificity** (★ 2×) — This codebase, this error, this code. Penalizes AI slop
-3. **Visual completeness** (★ 2×) — ≥2 visuals, Mermaid→PNG rendered, alt text complete
+3. **Visual fit & completeness** (★ 2×) — representation-fit not quota: each complex concept in the form that fits it (editorial card / screenshot / table / structural diagram), no decorative filler, no Mermaid monoculture; prose where prose is better
 4. **Gutenberg validity** — wp:group inner blocks, wp:list-item, heading class, no inline Mermaid
 5. **Metadata fit** — 1-2 categories (prefer existing), 5-10 tags, specific SEO title
 6. **Craft** — Korean 종결어미 마침표 100%, code language tags, typo-free
 
-2× floor on Originality and Visual completeness matches the article's guidance
+2× floor on Originality and Visual fit matches the article's guidance
 to weight Claude's weak-by-default axes. See [`references/rubric.md`](references/rubric.md)
 for all 18 few-shot calibration anchors (6 criteria × scores 1/3/5).
 

@@ -30,35 +30,46 @@ Evaluator가 네 작업을 파일로만 검증할 것이다. 너는 Planner/Eval
    - 또는 `python3 ~/.claude/skills/wp-blog-post/scripts/md_to_html.py < post_vN.md > post_vN.html`
      호출 후, 그 출력의 블록 규칙 준수를 직접 재검사.
 
-3. **Visual assets (infographic-first)**:
-   - **Principle**: visuals are the primary delivery vehicle so the post structure and every
-     explanation are graspable at a glance. Target one visual per major section (≥2 per post)
-     and **diversify types** — mind map (topic decomposition), flowchart, architecture/schematic,
-     chart/graph (metrics), timeline, sequence, webtoon/illustration (problem→solution narrative),
-     and other creative visualizations beyond these types — the list is not exhaustive (journey
-     strip, quadrant, labeled map, cards, custom infographic, …). Repeating one
-     type is penalized by the Evaluator. Standard: "Can the post be understood by skimming the
-     images alone?"
-   - **Plugin-independent images only**: every infographic must be a self-contained static image
-     file (PNG/JPG/SVG) that renders with no WordPress plugin, shortcode, or client-side library.
-     Render ahead of time, then embed via the core `wp:image` block. Never emit inline Mermaid,
-     `[chart]`/`[diagram]` shortcodes, plugin-specific blocks, or `<script>`-driven charts.
-   - Mermaid: save to `wp-blog-post/assets/diagram_N.mmd`, render with:
-     ```bash
-     mmdc -i wp-blog-post/assets/diagram_N.mmd \
-          -o wp-blog-post/assets/diagram_N.png \
-          -w 900 --backgroundColor white
-     ```
-     `mmdc` renders `mindmap`, `xychart-beta` (charts), `pie`, `timeline`, `quadrantChart`, and
-     `sequenceDiagram` in addition to flowcharts — pick the header that fits the content and vary it.
-     Mermaid is used only as a local CLI render step; its source never ships in the post body.
-   - **Webtoon / custom infographics**: for illustrations, comic panels, or hand-styled schematics
-     that Mermaid can't express, generate a static PNG with an image-gen tool, save to
-     `wp-blog-post/assets/`, and upload via `upload_media.py` in the publish step. Specific alt
-     text required on every image.
+3. **Visual assets (representation-fit, NOT a per-section quota)**:
+   - **Principle**: a visual earns its place only when it makes a concept graspable that prose can't
+     carry efficiently. **The content decides the form.** Do NOT stamp one visual per section — most
+     sections read fine as prose, and leaving them as prose is correct. Build ONLY the visuals
+     `spec.md` §6 warrants. Standard: "Is each complex concept in the form that fits it, with no
+     decorative filler?"
+   - **Choose the form per concept** (open menu, not diagram-only):
+     - **Editorial card-news / poster card** — **preferred** for conceptual, framing, summary, and
+       explanatory content. Hand-design in HTML/CSS, then render to PNG:
+       ```bash
+       python3 scripts/render_html.py wp-blog-post/assets/card_N.html \
+            -o wp-blog-post/assets/card_N.png --width 1080 --height 1350 --scale 2
+       ```
+       (`--selector ".card"` to capture one element with auto-height; `--full-page` for a tall
+       infographic.) This gives full control of type hierarchy / color system / layout and breaks
+       the auto-diagram sameness. Keep the `.html` source in `assets/`.
+     - **Annotated screenshot** — for real UI / CLI output / actual results.
+     - **Comparison table** — dense multi-axis comparison (a 1st-class visual via `wp:table`, not filler).
+     - **Code diff / callout** — focused before/after or a key caveat.
+     - **Illustration / webtoon** — problem→solution narrative; generate a PNG, save to `assets/`.
+     - **Structural diagram (Mermaid → PNG)** — **only for genuine node-graphs** (data flow, state
+       machine, dependency, real sequence/timeline). Never the default, never to hit a count:
+       ```bash
+       mmdc -i wp-blog-post/assets/diagram_N.mmd \
+            -o wp-blog-post/assets/diagram_N.png \
+            -w 900 --backgroundColor white
+       ```
+       (`mmdc` also renders `mindmap`, `xychart-beta`, `pie`, `timeline`, `quadrantChart`,
+       `sequenceDiagram`.) Mermaid source never ships in the post body.
+   - **Render-origin diversity > type diversity**: an all-`mmdc` set looks uniform even with varied
+     diagram types — the Evaluator penalizes that monoculture. Mix origins (card + screenshot + at
+     most the structural diagrams a graph fits). If the content honestly warrants only one structural
+     diagram, one is enough — do not pad.
+   - **Plugin-independent images only**: every visual is a self-contained static image (PNG/JPG/SVG)
+     that renders with no WordPress plugin, shortcode, or client-side library. Render ahead of time,
+     embed via core `wp:image`. Never emit inline Mermaid, `[chart]`/`[diagram]` shortcodes,
+     plugin-specific blocks, or `<script>`-driven charts.
    - On render failure, record the error in `handoff.md` and accept FAIL. Never fabricate a PNG.
-   - In the body HTML use placeholder URLs `{{ASSET:diagram_N.png}}`; real URL substitution happens
-     in the publish step after user approval.
+   - In the body HTML use placeholder URLs `{{ASSET:card_N.png}}`; real URL substitution happens in
+     the publish step after user approval. Specific alt text required on every image.
    - Inline `<pre class="mermaid">` is strictly forbidden — it does not render on a stock WordPress
      install (plugin-dependent).
 
@@ -100,7 +111,10 @@ Evaluator가 네 작업을 파일로만 검증할 것이다. 너는 Planner/Eval
 - 한글 종결어미 뒤 마침표 누락.
 - `<div>`, `<span>` 같은 raw HTML을 `wp:group` 안에 블록 주석 없이 배치.
 - 카테고리를 조회 없이 임의로 신규 생성.
-- 시각 요소를 "다음 라운드에서"로 미루기 (R3까지 반드시 PNG 존재해야 PASS 가능).
+- 계획한(§6) 시각 요소를 "다음 라운드에서"로 미루기 (R3까지 PNG 존재해야 PASS 가능).
+- 내용 무관하게 섹션마다 visual 1개씩 박기 (quota 사고). 필요한 개념에만.
+- 모든 visual을 `mmdc` Mermaid로 찍기 (render monoculture). 카드/스크린샷/표로 다양화.
+- 복잡한 개념(다중 컴포넌트 흐름·아키텍처·before/after)을 텍스트 벽으로 방치 (under-visualization).
 
 ## Output files
 
@@ -133,9 +147,11 @@ DECISION: REFINE | PIVOT | ESCALATE
 ## Assumptions I made
 - (명시적 가정과 그 이유)
 
-## Visuals produced
-- assets/diagram_1.png — flowchart, 배치: Implementation §
-- assets/diagram_2.png — ...
+## Visuals produced (form + why a visual beats prose here; render origin)
+- assets/card_1.png — editorial card (render_html.py), 개념: 핵심 프레이밍, 배치: 배경 §
+- assets/shot_1.png — annotated screenshot, 실제 CLI 출력, 배치: Implementation §
+- assets/diagram_1.png — Mermaid sequence (node-graph), 요청 흐름, 배치: 동작 §
+- (prose로 둔 섹션과 그 이유도 1줄 기록 — 절제도 의도임을 Evaluator에 전달)
 
 ## External content cited
 - (있다면 출처와 실제 URL)

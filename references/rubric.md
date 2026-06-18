@@ -28,26 +28,36 @@ Claude가 기본값에서 약한 영역. 2× 가중.
 **Hard floor**: "바야흐로", "오늘날 빠르게 변화하는", "In today's fast-paced world",
 "이번 포스트에서는 ~에 대해 알아보겠습니다" 형태의 오프닝이 있으면 최대 3점.
 
-## 3. Visual completeness (weight 2×) ★
+## 3. Visual fit & completeness (weight 2×) ★
 
-Area where Claude is weak by default (tends to replace visuals with text). Weighted 2×.
-**Infographic-first**: visuals are the primary delivery vehicle so the post structure and every
-explanation are graspable at a glance. Top-score criterion: "Can the post be understood by
-skimming the images alone?" All visuals must be **plugin-independent static images** (PNG/JPG/SVG)
-embedded via core `wp:image` — no inline Mermaid, shortcodes, or JS chart libraries.
+Area where Claude is weak by default — but the failure is **two-directional**: it either replaces
+nothing with text (under-visualizes a complex concept) OR mechanically stamps one auto-diagram per
+section (quota + Mermaid monoculture). Weighted 2×. **Representation-fit, not quota**: a visual
+earns its place only when it makes a concept graspable that prose can't carry efficiently; the
+**content decides the form**, and choosing prose/table/code over a diagram is good craft.
+Top-score criterion: "Is every complex concept either visualized in the form that fits it, or
+deliberately left as prose because prose was better — with no decorative filler?" The form menu is
+**open and not diagram-only**: editorial card-news / poster cards (hand-designed HTML/CSS → PNG, the
+preferred mode for conceptual & explanatory content), annotated screenshots, comparison tables, code
+diffs, illustration/webtoon, AND structural diagrams (flowchart / mind map / architecture / sequence
+/ timeline / chart) **only when content is genuinely a process / hierarchy / flow / metric**. All
+visuals must be **plugin-independent static images** (PNG/JPG/SVG) embedded via core `wp:image`.
 
 | Score | Criterion |
 |---|---|
-| 5 | Most major sections carry their own visual (≥3 total). **Diverse types** (e.g. mind map + flowchart + chart/graph + table, or webtoon/illustration, timeline, quadrant). Each compresses/replaces a body paragraph; the type list is not exhaustive — fitting open-ended creative visuals also count. |
-| 4 | ≥2 visuals, complex concepts properly diagrammed, ≥2 distinct types mixed, alt text complete. |
-| 3 | 2 visuals but monotone in type (same diagram/table repeated) or one is decorative (table just re-states body text). |
-| 2 | Only 1 visual. |
-| 1 | None. Or inline `<pre class="mermaid">` used (plugin-dependent). |
+| 5 | Every concept that needed a visual got one in the **fitting form**; nothing complex left as a text wall; nothing decorative added. **Render-origin diversity** — not an all-`mmdc` set (e.g. an editorial card + a screenshot + at most the one structural diagram a graph fits). Each visual replaces work text couldn't do. |
+| 4 | The concepts that needed visuals are visualized in fitting forms; ≥2 distinct render origins/types; alt text complete; at most a minor form mismatch. |
+| 3 | Visuals present but **monoculture** (all `mmdc` Mermaid, or same type repeated), OR one is decorative filler restating body text, OR one complex concept left un-visualized. |
+| 2 | Quota-stamped one-per-section regardless of need, or a clearly complex concept dumped as a text wall. |
+| 1 | A concept that obviously needed a visual has none. Or inline `<pre class="mermaid">` used (plugin-dependent). |
 
-**Hard floor**: fewer than 2 PNGs in `assets/` → auto score 1 + Hard fail.
-**Diversity floor**: if all visuals are the same type (e.g. 3 tables) → max score 3; ≥2 distinct
-types (mind map / flowchart / chart / architecture / timeline / sequence / webtoon-illustration)
-required for score 4+.
+**Under-visualization floor**: a clearly complex concept (multi-component flow, before/after,
+decision branching, architecture) left as a text wall with no fitting visual → max score 2 + Hard fail.
+**Filler / quota floor**: a visual that just restates adjacent prose, or visuals stamped one-per-section
+to hit a count → max score 3.
+**Render-monoculture floor**: every visual is a `mmdc` Mermaid render when the content offered better
+forms (the post reads as a uniform auto-diagram set) → max score 3; mix ≥2 distinct render origins
+(editorial card / screenshot / structural diagram / table) for score 4+.
 **Plugin-dependency floor**: any inline Mermaid, chart/diagram shortcode, plugin-specific block,
 or JS-injected chart in the post body → auto score 1 + Hard fail.
 
@@ -97,7 +107,7 @@ weighted_avg = (c1 + 2×c2 + 2×c3 + c4 + c5 + c6) / 8
 
 - c1: Content depth & structure (1×)
 - c2: Originality & tech specificity (2×) ★
-- c3: Visual completeness (2×) ★
+- c3: Visual fit & completeness (2×) ★
 - c4: Gutenberg validity (1×)
 - c5: Metadata fit (1×)
 - c6: Craft (1×)
@@ -105,7 +115,7 @@ weighted_avg = (c1 + 2×c2 + 2×c3 + c4 + c5 + c6) / 8
 ### 통과 조건 (3단계 floor + 가중 평균, 모두 만족해야 PASS)
 
 1. **2× floor**: `c2 ≥ 4` AND `c3 ≥ 4`
-   Claude의 약점 축(Originality, Visual completeness)은 타 기준의 평균으로 상쇄 불가.
+   Claude의 약점 축(Originality, Visual fit)은 타 기준의 평균으로 상쇄 불가.
    이 둘 중 하나라도 3 이하면 타 기준 점수와 무관하게 **즉시 FAIL**.
 2. **1× floor**: `min(c1, c4, c5, c6) ≥ 3`
    단일 기준이 2 이하면 가중 평균이 4.0을 넘더라도 **즉시 FAIL**.
@@ -167,17 +177,22 @@ Evaluator는 첫 라운드 전 내부적으로 아래 앵커를 기준선으로 
   내부적으로 600초로 강제되어 프로덕션 메모리 스파이크 원인이 됨.' 실제 commit SHA·라인
   번호·에러 스택 트레이스가 증거로 제시."
 
-### 3. Visual completeness (★ 2×)
+### 3. Visual fit & completeness (★ 2×)
 
-- **Score 1** — "0 PNGs in `assets/`. Body has one table and just re-lists the Implementation
-  steps as text. No diagrams. Hard fail." (Also score 1 if any inline `<pre class=\"mermaid\">`
-  or chart shortcode is used — plugin-dependent.)
-- **Score 3** — "2 PNGs exist but the second is a decorative table repeating body text. Complex
-  architecture (data flow between components) is not diagrammed. All alt text present."
-- **Score 5** — "3 PNGs — mind map (post scope), flowchart (Implementation §), and a metrics
-  chart (xychart-beta, before/after p95). Diverse types, each compresses a body paragraph and
-  is graspable on its own. All alt text specific. Source `.mmd` files preserved in assets/.
-  Every visual is a plugin-independent static image embedded via core `wp:image`."
+- **Score 1** — "The architecture section describes a 5-component data flow entirely in prose — the
+  one concept that obviously needed a visual has none. Under-visualization Hard fail." (Also score 1
+  if any inline `<pre class=\"mermaid\">` or chart shortcode is used — plugin-dependent.)
+- **Score 2** — "One visual stamped per section to hit a count: a `mmdc` flowchart, a `mmdc` mind
+  map, a `mmdc` pie — all auto-diagram look, two of them just re-draw a bullet list that read fine
+  as text. Quota + monoculture."
+- **Score 3** — "2 visuals but both `mmdc` Mermaid (render monoculture), and the second restates the
+  body list (decorative). The genuinely complex before/after metric is left in a paragraph. Alt text present."
+- **Score 5** — "Each concept got the form that fit it: an **editorial card-news cover** (HTML/CSS →
+  PNG via `render_html.py`) for the post's framing, an **annotated screenshot** of the real CLI
+  output, a **comparison table** for the 3 approaches, and **one** `mmdc` sequence diagram where the
+  request flow genuinely is a node-graph. Three sections that read fine as prose got no visual — and
+  that's correct. Render origins diverse, no filler, all alt text specific, every visual a
+  plugin-independent static image via core `wp:image`."
 
 ### 4. Gutenberg validity
 
