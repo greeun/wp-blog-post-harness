@@ -89,10 +89,14 @@
   efficiently. **The content decides the form.** Do NOT assign one visual per section. Most sections
   read fine as prose — leaving them as prose is correct, not a gap.
 - **Per concept, decide in two steps**: (1) Does this concept genuinely need a visual? (2) If yes,
-  which form fits? The menu is **open and not diagram-only**:
-  - **Editorial card-news / poster card** (hand-designed HTML/CSS → PNG) — **preferred** for
-    conceptual, framing, summary, and explanatory content. Full control of type hierarchy, color
-    system, layout; breaks the auto-diagram sameness. (e.g. freestory card-news look: 4:5 cards.)
+  which form fits? The menu is **open with NO default-preferred form — pick by what the concept *is*,
+  not by what is easy** (relationship/process → flowchart/sequence/funnel; comparison → matrix/table;
+  hierarchy → mind map; metric → chart; real UI → screenshot; standalone summary/cover → editorial
+  card). **Do NOT default to card-news; an all-card set is its own monoculture, same failure as an
+  all-Mermaid set. Plan a mix of forms across the visuals.**
+  - **Editorial card-news / poster card** (hand-designed HTML/CSS → PNG) — one option, fitting for a
+    genuine standalone summary/framing/cover block (not the default for all conceptual content). Full
+    control of type hierarchy, color system, layout; breaks the auto-diagram sameness. (4:5 cards.)
   - **Annotated screenshot** — for real UI / CLI output / actual results.
   - **Comparison table** — dense multi-axis comparison (a 1st-class visual, not filler).
   - **Code diff / callout** — focused before/after or a key caveat.

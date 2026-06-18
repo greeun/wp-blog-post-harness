@@ -37,11 +37,16 @@ earns its place only when it makes a concept graspable that prose can't carry ef
 **content decides the form**, and choosing prose/table/code over a diagram is good craft.
 Top-score criterion: "Is every complex concept either visualized in the form that fits it, or
 deliberately left as prose because prose was better — with no decorative filler?" The form menu is
-**open and not diagram-only**: editorial card-news / poster cards (hand-designed HTML/CSS → PNG, the
-preferred mode for conceptual & explanatory content), annotated screenshots, comparison tables, code
-diffs, illustration/webtoon, AND structural diagrams (flowchart / mind map / architecture / sequence
-/ timeline / chart) **only when content is genuinely a process / hierarchy / flow / metric**. All
-visuals must be **plugin-independent static images** (PNG/JPG/SVG) embedded via core `wp:image`.
+**open with NO default-preferred form**: editorial card-news / poster cards (hand-designed HTML/CSS →
+PNG), annotated screenshots, comparison tables / 2×2 matrices, code diffs, illustration/webtoon, AND
+structural diagrams (flowchart / mind map / architecture / sequence / timeline / chart) **only when
+content is genuinely a process / hierarchy / flow / metric**. **Pick the form by what the concept *is*,
+not by what is easy** — a card is right only when the content is genuinely a standalone summary/cover;
+a relationship wants a diagram, a comparison wants a matrix/table, a process wants a sequence. **Do
+NOT default to card-news, and do not let the card/box form repeat across most visuals** — an all-card
+set is its own monoculture, the same failure as an all-`mmdc` set (see the Score table's
+render-origin-diversity requirement). All visuals must be **plugin-independent static images**
+(PNG/JPG/SVG) embedded via core `wp:image`.
 
 | Score | Criterion |
 |---|---|
@@ -184,7 +189,9 @@ Evaluator는 첫 라운드 전 내부적으로 아래 앵커를 기준선으로 
   if any inline `<pre class=\"mermaid\">` or chart shortcode is used — plugin-dependent.)
 - **Score 2** — "One visual stamped per section to hit a count: a `mmdc` flowchart, a `mmdc` mind
   map, a `mmdc` pie — all auto-diagram look, two of them just re-draw a bullet list that read fine
-  as text. Quota + monoculture."
+  as text. Quota + monoculture." (Equally Score 2: **every visual an editorial card on the same
+  template** — five rounded cards on the same palette, one per section. Card-news monoculture is the
+  same failure as Mermaid monoculture; the form must vary by what each concept *is*.)
 - **Score 3** — "2 visuals but both `mmdc` Mermaid (render monoculture), and the second restates the
   body list (decorative). The genuinely complex before/after metric is left in a paragraph. Alt text present."
 - **Score 5** — "Each concept got the form that fit it: an **editorial card-news cover** (HTML/CSS →

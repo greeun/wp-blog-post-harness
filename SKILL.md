@@ -146,14 +146,17 @@ Evaluator 통과 **AND** 사용자 명시 승인 후에만 WordPress REST API로
    form, and a visual is added only when it earns its place.** No per-section quota; choosing a
    table / code block / callout / prose over a diagram is good craft, not a deficiency.
    **Decision per concept**: (1) Does this genuinely need a visual? (2) If yes, which representation
-   fits? The menu is **open and not diagram-only**: editorial card-news / poster cards (hand-designed
-   HTML/CSS → PNG, the preferred mode for conceptual & explanatory content), annotated screenshots,
-   comparison tables, code diffs, illustration/webtoon, AND structural diagrams (flowchart, mind map,
-   architecture, sequence, timeline, chart) **only when the content is genuinely a process / hierarchy
-   / flow / metric.** **Render-origin diversity matters as much as type diversity**: two `mmdc`
-   diagrams look identical even if their types differ — that monoculture is the failure. Mix
-   editorial cards + screenshots + (at most) the structural diagrams a graph actually fits.
-   **Mermaid is demoted to genuine node-graphs only** — never the default, never to hit a count.
+   fits? The menu is **open with NO default-preferred form**: editorial card-news / poster cards
+   (hand-designed HTML/CSS → PNG), annotated screenshots, comparison tables / 2×2 matrices, code
+   diffs, illustration/webtoon, AND structural diagrams (flowchart, mind map, architecture, sequence,
+   timeline, chart) **only when the content is genuinely a process / hierarchy / flow / metric.**
+   **Pick the form by what the concept *is*, not by what is easy** — a card is right only when the
+   content is genuinely a standalone summary/cover; a relationship wants a diagram, a comparison a
+   matrix/table, a process a sequence. **Render-origin diversity matters as much as type diversity**:
+   two `mmdc` diagrams look identical even if their types differ — that monoculture is the failure,
+   and **so is an all-card set** (every visual the same rounded-card template is card-news
+   monoculture). Mix forms; do not default to cards and do not let the card/box form repeat across
+   most visuals. **Mermaid is demoted to genuine node-graphs only** — never the default, never to hit a count.
    Alt text required. **Plugin-independent only**: every visual ships as a static image file embedded
    via the core `wp:image` block — no inline Mermaid, shortcodes, or JS chart libraries.
    Pass criterion: "Is every complex concept either visualized in the form that fits it, or
@@ -191,11 +194,13 @@ Evaluator 통과 **AND** 사용자 명시 승인 후에만 WordPress REST API로
    concept and decide per concept whether it needs a visual and which form fits (most don't — that's
    fine). Draft the chosen visuals' sources.
 3. **R3 Visuals & Metadata** — Representation-fit design: build only the visuals R2 mapped, in the
-   form that fits each. **Editorial card-news / poster cards** (hand-designed HTML/CSS → PNG via
-   `scripts/render_html.py`) are the preferred mode for conceptual & explanatory content. Use
-   **annotated screenshots** for real UI/output, **tables** for dense comparison, and reserve
+   form that fits each, with **NO default-preferred form**. **Pick the form by what each concept *is*:**
+   a relationship/process → flowchart/sequence/funnel; a comparison → matrix/table; a hierarchy →
+   mind map; a metric → chart; a real UI/output → annotated screenshot; a standalone summary/cover →
+   editorial card (hand-designed HTML/CSS → PNG via `scripts/render_html.py`). Reserve
    **Mermaid → PNG** (`mmdc`) for genuine node-graphs only (data flow, state machine, dependency).
-   Vary render origin, not just diagram type — avoid an all-Mermaid set. Webtoon/custom images are
+   **Vary the form across visuals** — avoid an all-Mermaid set AND an all-card set; both are
+   monoculture. Do not stamp the same rounded-card template on every concept. Webtoon/custom images are
    generated then uploaded via `upload_media.py`. All visuals are **plugin-independent static images**
    embedded via core `wp:image` (no inline Mermaid/shortcodes/JS). Finalize categories/tags and SEO title.
 4. **R4 Gutenberg Compliance** — 블록 규칙 전수검사, 오탈자·종결어미 점검.

@@ -36,9 +36,14 @@ Evaluator가 네 작업을 파일로만 검증할 것이다. 너는 Planner/Eval
      sections read fine as prose, and leaving them as prose is correct. Build ONLY the visuals
      `spec.md` §6 warrants. Standard: "Is each complex concept in the form that fits it, with no
      decorative filler?"
-   - **Choose the form per concept** (open menu, not diagram-only):
-     - **Editorial card-news / poster card** — **preferred** for conceptual, framing, summary, and
-       explanatory content. Hand-design in HTML/CSS, then render to PNG:
+   - **Choose the form per concept** (open menu, NO default-preferred form — pick by what the concept
+     *is*, not by what is easy: a relationship/process → flowchart/sequence/funnel; a comparison →
+     matrix/table; a hierarchy → mind map; a metric → chart; a real UI → screenshot; a standalone
+     summary/cover → editorial card. **Do NOT default to cards, and do not let the same rounded-card
+     template repeat across most visuals — an all-card set is card-news monoculture, the same failure
+     as an all-Mermaid set.**):
+     - **Editorial card-news / poster card** — one option, fitting for a genuine standalone
+       summary/cover/framing block (not the default for all conceptual content). Hand-design in HTML/CSS, then render to PNG:
        ```bash
        python3 scripts/render_html.py wp-blog-post/assets/card_N.html \
             -o wp-blog-post/assets/card_N.png --width 1080 --height 1350 --scale 2

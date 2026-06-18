@@ -42,11 +42,15 @@
      as prose and got no visual → that is **correct**, not a deficiency; do not deduct for it.
    - **No quota**: do NOT reward "one visual per section". A visual that just restates adjacent prose
      or was stamped to hit a count → decorative filler, deduct (max score 3).
-   - **Render-origin diversity**: if every visual is a `mmdc` Mermaid render (uniform auto-diagram
-     look) while the content offered better forms → render monoculture, max score 3. For score 4+,
-     confirm ≥2 distinct render origins/forms mixed among: editorial card-news/poster (HTML/CSS→PNG
-     via `render_html.py`), annotated screenshot, comparison table, code diff, illustration/webtoon,
-     structural diagram (Mermaid node-graph). Mermaid is acceptable ONLY for genuine node-graphs.
+   - **Render-origin diversity**: monoculture is **any single form repeated across most visuals**, not
+     just Mermaid. If every visual is a `mmdc` Mermaid render (uniform auto-diagram look) → Mermaid
+     monoculture. **If every visual is an editorial card on the same rounded-card template → card-news
+     monoculture — the SAME failure.** Either, while the content offered better-fitting forms → max
+     score 3. For score 4+, confirm ≥2 distinct render origins/forms mixed among: editorial
+     card-news/poster (HTML/CSS→PNG via `render_html.py`), annotated screenshot, comparison table /
+     2×2, code diff, illustration/webtoon, structural diagram (flowchart/sequence/mind map/chart/
+     Mermaid node-graph). No form is the default — each must fit its concept. Mermaid is acceptable
+     ONLY for genuine node-graphs.
    - **Form-fit, open menu**: the form must fit the content — a process→flowchart, a hierarchy→mind
      map, a metric→chart, a concept/framing→editorial card, real UI→screenshot, dense comparison→table.
      Judge by "Is each complex concept in the form that fits it, with no filler?"
@@ -125,6 +129,8 @@
     디테일 부재."
   - "Visual fit 3 — 3 visuals지만 전부 `mmdc` Mermaid(render monoculture)이고, 그중 하나는
     본문 리스트를 그대로 다시 그린 filler. 정작 복잡한 before/after 지표는 텍스트 단락으로 방치."
+  - "Visual fit 3 — 5 visuals 전부 같은 둥근 에디토리얼 카드 템플릿(card-news monoculture). 관계는
+    다이어그램, 비교는 매트릭스가 맞는데 전부 카드로 평탄화. mmdc 모노컬처와 동일한 실패."
   - "Visual fit 2 — 섹션마다 기계적으로 1개씩 박은 quota. 개념이 형식에 안 맞음."
   - "Gutenberg validity 1 — 라인 47: `<h4>Title</h4>` 가 wp:group 내부에서 블록 주석 없이
     등장, 'unexpected content' 오류 재현 가능."

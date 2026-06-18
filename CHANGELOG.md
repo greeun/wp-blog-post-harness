@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.2.1] — 2026-06-18
+
+Fixes a card-news monoculture bias introduced by 1.2.0's own wording. The 1.2.0 form menu named
+editorial card-news / poster cards as the **preferred** mode for conceptual content, which biased the
+Generator into stamping the same rounded-card template on every concept — its own monoculture, the
+exact failure 1.2.0 fixed for Mermaid.
+
+### Fixed
+- **Removed the "card-news = preferred mode" wording** across `SKILL.md`, `references/rubric.md`,
+  `references/planner-prompt.md`, `references/generator-prompt.md`. The form menu now has **NO
+  default-preferred form**: pick by what the concept *is* — relationship/process → flowchart/sequence/
+  funnel, comparison → matrix/table, hierarchy → mind map, metric → chart, real UI → screenshot,
+  standalone summary/cover → editorial card.
+- **Evaluator render-monoculture check generalized** from Mermaid-only to **any single form repeated
+  across most visuals**, explicitly including an all-card set (max score 3). Added a card-monoculture
+  calibration example.
+- **rubric Score 2 example** now also flags an all-editorial-card set as monoculture, symmetric with
+  the all-`mmdc` example.
+
 ## [1.2.0] — 2026-06-18
 
 Visualization criterion reworked from **infographic-first quota** to **representation-fit**. The
