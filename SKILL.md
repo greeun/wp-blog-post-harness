@@ -14,7 +14,7 @@ description: |
   "평가기 블로그", "평가기 블로그 포스트", "하네스로 블로그", "하네스로 워드프레스",
   "블로그 품질 검증", "블로그 자율 작성", "블로그 멀티에이전트", "기술 블로그 하네스",
   "튜토리얼 하네스", "세션 정리 하네스".
-version: 1.2.1
+version: 1.3.0
 ---
 
 # WordPress Blog Post Harness
@@ -23,8 +23,8 @@ version: 1.2.1
 Evaluator 통과 **AND** 사용자 명시 승인 후에만 WordPress REST API로 게시한다.
 
 방법론은 Anthropic의 "Harness Design for Long-Running Application Development"
-(Prithvi Rajasekaran, 2026) 원문 원칙의 직역 이식이다. 기존 단일 패스 `wp-blog-post`
-스킬과 동일한 publish 파이프라인을 재사용하되, 품질 보증 루프를 구조적으로 앞단에 추가한다.
+(Prithvi Rajasekaran, 2026) 원문 원칙의 직역 이식이다. 단일 패스 생성과 동일한 publish
+파이프라인을 쓰되, 그 앞단에 품질 보증 루프를 구조적으로 추가한다.
 
 ---
 
@@ -293,7 +293,7 @@ subagent 디스패치 전제로 설계되었으며, 단일 세션 실행은 자�
 - **Publish gate**: Evaluator PASS는 게시 조건이 **아니다**. 오직 사용자 승인만.
 - **카테고리 신규 생성**: Planner가 spec에 사유 명시. 사유가 약하면 Evaluator가 감점.
 - **렌더 실패**: 계획한 visual의 PNG가 없으면 Visual fit 자동 FAIL — 인라인 `<pre class="mermaid">`
-  금지(wp-blog-post 원문 규칙). 에디토리얼 카드 렌더 실패는 `handoff.md`에 에러 기록 후 FAIL 수용.
+  금지(Gutenberg 블록 규칙). 에디토리얼 카드 렌더 실패는 `handoff.md`에 에러 기록 후 FAIL 수용.
 
 ### Tuning the Evaluator across runs
 
@@ -321,7 +321,7 @@ subagent 디스패치 전제로 설계되었으며, 단일 세션 실행은 자�
 
 ## Environment Variables (Publishing 단계)
 
-기존 `wp-blog-post` 스킬과 동일:
+게시 단계에서 아래 3개를 요구한다:
 
 ```bash
 export WP_SITE_URL="https://your-site.com"
@@ -333,16 +333,16 @@ export WP_APP_PASSWORD="xxxx xxxx xxxx xxxx xxxx xxxx"
 
 ---
 
-## Scripts (기존 `wp-blog-post` 재사용)
+## Scripts
 
-게시 파이프라인은 기존 스킬 스크립트를 그대로 호출한다. 중복 구현하지 않는다.
+게시 파이프라인 스크립트는 이 스킬 안에 있다. 다른 스킬 설치를 요구하지 않는다.
 
 | 스크립트 | 역할 | 호출 시점 |
 |---|---|---|
-| `scripts/render_html.py` (이 스킬) | **에디토리얼 visual** HTML/CSS → PNG (카드뉴스/포스터/도식). 1급·우선 경로 | Generator가 시각 자산 생성 시 |
-| `~/.claude/skills/wp-blog-post/scripts/md_to_html.py` | Markdown → Gutenberg 블록 HTML | Generator가 드래프트 생성 시 |
-| `~/.claude/skills/wp-blog-post/scripts/upload_media.py` | 이미지 업로드 (PNG/JPG) | 사용자 승인 후 publish 단계 |
-| `~/.claude/skills/wp-blog-post/scripts/publish_post.py` | 포스트 게시 (draft/publish) | 사용자 승인 후 publish 단계 |
+| `scripts/render_html.py` | **에디토리얼 visual** HTML/CSS → PNG (카드뉴스/포스터/도식). 1급·우선 경로 | Generator가 시각 자산 생성 시 |
+| `scripts/md_to_html.py` | Markdown → Gutenberg 블록 HTML | Generator가 드래프트 생성 시 |
+| `scripts/upload_media.py` | 이미지 업로드 (PNG/JPG) | 사용자 승인 후 publish 단계 |
+| `scripts/publish_post.py` | 포스트 게시 (draft/publish) | 사용자 승인 후 publish 단계 |
 
 **에디토리얼 카드 렌더 (우선 경로)**: 개념 카드·포스터·도식을 HTML/CSS로 디자인 후
 `python3 scripts/render_html.py card.html -o assets/card_N.png --width 1080 --height 1350 --scale 2`
@@ -475,4 +475,3 @@ wp-blog-post/
 - Evaluator 프롬프트: [references/evaluator-prompt.md](references/evaluator-prompt.md)
 - 루브릭 상세: [references/rubric.md](references/rubric.md)
 - Gutenberg 블록 규칙: [references/gutenberg-rules.md](references/gutenberg-rules.md)
-- 기존 단일 패스 스킬 (publish 파이프라인 소스): `~/.claude/skills/wp-blog-post/`

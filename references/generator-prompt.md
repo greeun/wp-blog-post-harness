@@ -27,7 +27,7 @@ Evaluator가 네 작업을 파일로만 검증할 것이다. 너는 Planner/Eval
 2. **전체 라운드 목표**: `post_vN.md`(Markdown 원본)와 `post_vN.html`(WordPress Gutenberg 유효 HTML)을
    함께 작성한다. 두 버전은 동일 내용. HTML은 다음 중 택1:
    - 직접 Gutenberg 블록 주석을 포함한 HTML 작성 (권장, 블록 규칙 정확 제어)
-   - 또는 `python3 ~/.claude/skills/wp-blog-post/scripts/md_to_html.py < post_vN.md > post_vN.html`
+   - 또는 `python3 scripts/md_to_html.py < post_vN.md > post_vN.html`
      호출 후, 그 출력의 블록 규칙 준수를 직접 재검사.
 
 3. **Visual assets (representation-fit, NOT a per-section quota)**:

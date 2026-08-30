@@ -167,8 +167,8 @@ Methodology from:
 - **"Harness Design for Long-Running Application Development"** — Prithvi Rajasekaran, Anthropic (2026)
 - **"Building Effective Agents"** — Anthropic ("find the simplest solution possible, and only increase complexity when needed")
 
-Extends the sibling [`wp-blog-post`](../wp-blog-post/) skill by adding the
-Planner → Generator → Evaluator quality-gate loop before publish.
+Puts a Planner → Generator → Evaluator quality gate in front of the WordPress
+publish pipeline. The publish scripts ship with this skill — nothing else to install.
 
 ## License
 

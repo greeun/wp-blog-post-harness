@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.0] — 2026-08-31
+
+The skill is now self-contained: it no longer calls into another skill's install directory.
+
+### Changed
+- **Vendored the publish pipeline.** `scripts/md_to_html.py`, `scripts/upload_media.py`, and
+  `scripts/publish_post.py` are now part of this skill. Previously `SKILL.md` and
+  `references/generator-prompt.md` invoked them through
+  `~/.claude/skills/wp-blog-post/scripts/...`, so the harness broke unless that other skill
+  happened to be installed under that exact name.
+- Removed the remaining cross-skill pointers from `SKILL.md` (Scripts table, Environment
+  Variables intro, Reference list) and the `../wp-blog-post/` relative links in `README.md`,
+  `README.ko.md`, and the 1.2.1 changelog entry — those resolve to nothing once this
+  repository stands on its own.
+
 ## [1.2.1] — 2026-06-18
 
 Fixes a card-news monoculture bias introduced by 1.2.0's own wording. The 1.2.0 form menu named
@@ -89,7 +104,7 @@ Initial release. WordPress blog post authoring and publishing using the
 - Gutenberg block machine validation (wp:group / wp:list-item / wp:heading class / Mermaid→PNG)
 - Korean 종결어미 마침표 전수검사
 - Mandatory human gate before WordPress publishing
-- Reuses existing [`wp-blog-post`](../wp-blog-post/) scripts for md→HTML, media upload, post publish
+- Reuses the existing single-pass skill's scripts for md→HTML, media upload, post publish
 - Model-specific tier guidance (Sonnet 4.5 / Opus 4.5 / 4.6 / 4.7+)
 - Evaluator tuning loop with divergence logging
 

@@ -160,8 +160,8 @@ wp-blog-post-harness/
 - **"Harness Design for Long-Running Application Development"** — Prithvi Rajasekaran, Anthropic (2026)
 - **"Building Effective Agents"** — Anthropic ("find the simplest solution possible, and only increase complexity when needed")
 
-형제 스킬 [`wp-blog-post`](../wp-blog-post/)에 Planner → Generator → Evaluator
-품질 게이트 루프를 추가한 확장판.
+WordPress 게시 파이프라인 앞단에 Planner → Generator → Evaluator 품질 게이트를
+둔 구성. 게시 스크립트는 이 스킬에 포함돼 있어 별도 설치가 필요 없다.
 
 ## 라이선스
 
